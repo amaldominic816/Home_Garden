@@ -13,6 +13,7 @@ dependencies:
   google_sign_in: ^6.1.4
   sign_in_with_apple: ^7.0.1
   intl: ^0.18.0
+  table_calendar: ^3.0.9
 
 
 dev_dependencies:
@@ -33,6 +34,7 @@ flutter:
     - assets/images/logo.png
     - assets/images/google.png
     - assets/images/logo-c.png
+    - assets/icon/
 fonts:
     - family: DMSans            # this is the fontFamily name you’ll use in code
       fonts:

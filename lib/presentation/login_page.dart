@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:home_garden/presentation/homescreen.dart';
 import 'home_page.dart';      // <‑‑ new import
 
 class LoginPage extends StatefulWidget {
@@ -19,7 +20,7 @@ class _LoginPageState extends State<LoginPage> {
     await Future.delayed(const Duration(milliseconds: 500)); // fake wait
     if (!mounted) return;
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => const HomePage()),
+      MaterialPageRoute(builder: (_) => WelcomeScreen()),
     );
   }
 

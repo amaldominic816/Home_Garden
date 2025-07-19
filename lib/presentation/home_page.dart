@@ -2,41 +2,46 @@
 
 import 'package:flutter/material.dart';
 import 'package:home_garden/presentation/ProfilePage.dart';
+import 'package:home_garden/presentation/widgets/custombutton.dart';
 import 'booking_page.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+
+import 'package:flutter/material.dart';
+
+class Servicepage extends StatefulWidget {
+  const Servicepage({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<Servicepage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<Servicepage> {
   final List<Map<String, dynamic>> services = const [
     {
       'title': 'Lawn Mowing',
-      'icon': Icons.grass,
+      'icon': "assets/icon/Lawn mowing icon.jpg",
       'color': Color(0xFF4CAF50),
     },
     {
       'title': 'Hedge Trimming',
-      'icon': Icons.content_cut,
+      'icon': "assets/icon/hedge trimming icon.jpg",
       'color': Color(0xFF4CAF50),
     },
     {
       'title': 'Garden Clearness',
-      'icon': Icons.cleaning_services,
+      'icon': "assets/icon/Garden Clearenses.jpg",
       'color': Color(0xFF4CAF50),
     },
     {
       'title': 'Jet Washing',
-      'icon': Icons.water_damage,
+      'icon': "assets/icon/jet washing icon.jpg",
       'color': Color(0xFF4CAF50),
     },
   ];
 
+  int? _selectedServiceIndex; // Track selected service
+
   void _onChooseServiceTap() {
-    // Show modal bottom sheet with list of services for booking
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -69,26 +74,68 @@ class _HomePageState extends State<HomePage> {
                 separatorBuilder: (_, __) => const Divider(),
                 itemBuilder: (context, index) {
                   final service = services[index];
-                  return ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: service['color'],
-                      child: Icon(service['icon'], color: Colors.white),
-                    ),
-                    title: Text(
-                      service['title'],
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w600, fontSize: 16),
-                    ),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) =>
-                              BookingPage(serviceTitle: service['title']),
+                  return Container(
+                    margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                        color: Colors.black,
+                        width: 1,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.1),
+                          spreadRadius: 1,
+                          blurRadius: 4,
+                          offset: const Offset(0, 2),
                         ),
-                      );
-                    },
+                      ],
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(7),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(7),
+                        onTap: () {
+                          Navigator.pop(context);
+                          setState(() {
+                            _selectedServiceIndex = index;
+                          });
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => BookingPage(serviceTitle: service['title']),
+                            ),
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                backgroundColor: service['color'],
+                                child: Image.asset(
+                                  service['icon'],
+                                  height: 24,
+                                  width: 24,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: Text(
+                                  service['title'],
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                   );
                 },
               ),
@@ -106,192 +153,68 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       backgroundColor: Colors.grey[50],
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(110),
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: const [
-                Color(0xFF215C3C), // replaces Colors.green.shade700
-                Color(0xFF3DAA77),
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            borderRadius: const BorderRadius.vertical(
-              bottom: Radius.circular(32),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.green.shade200.withOpacity(0.4),
-                blurRadius: 15,
-                offset: const Offset(0, 6),
-              ),
-            ],
-          ),
-          child: SafeArea(
-            bottom: false,
-            child: Padding(
-              padding:
-                  const EdgeInsets.only(left: 24, right: 16, top: 20, bottom: 16),
-              child: Row(
-                children: [
-                  SizedBox(
-                    height: 70,
-                    child: Image.asset(
-                      'assets/images/logo.png',
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                  const Spacer(),
-                  CircleAvatar(
-                    radius: 25,
-                    backgroundColor: Colors.white,
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.person,
-                        color: Colors.green.shade700,
-                        size: 28,
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => ProfilePage()),
-    );
-                      },
-                      tooltip: 'Profile',
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Promotion text
-            Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: const Color(0xFF4CAF50),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      "Gardening Services you'll love today",
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: _onChooseServiceTap,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: const Color(0xFF4CAF50),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 12,
-                        horizontal: 20,
-                      ),
-                      elevation: 0,
-                    ),
-                    child: const Text(
-                      "Book Now",
-                      style: TextStyle(fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                ],
+            Text(
+              'Choose a Service',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
               ),
             ),
-            const SizedBox(height: 24),
-
-            // "Choose a Service" label with button
-            GestureDetector(
-              onTap: _onChooseServiceTap,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                child: Row(
-                  children: [
-                    Text(
-                      'Choose a Service',
-                      style: theme.textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w700,
-                        color: Colors.green.shade900,
-                      ),
-                    ),
-                    const Spacer(),
-                    Icon(
-                      Icons.arrow_drop_down,
-                      color: Colors.green.shade900,
-                      size: 28,
-                    )
-                  ],
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 12),
-
-            // Services cards grid (1 item per row)
+            const SizedBox(height: 30),
             Expanded(
               child: GridView.builder(
                 itemCount: services.length,
-                gridDelegate:
-                    const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 1, // one item per row
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 1,
                   mainAxisSpacing: 18,
                   crossAxisSpacing: 18,
-                  childAspectRatio: 4,
+                  childAspectRatio: 5,
                 ),
                 itemBuilder: (context, index) {
                   final service = services[index];
+                  final isSelected = _selectedServiceIndex == index;
                   return GestureDetector(
                     onTap: () {
-                      // Open booking page with chosen service
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) =>
-                              BookingPage(serviceTitle: service['title']),
-                        ),
-                      );
+                      setState(() {
+                        _selectedServiceIndex = index;
+                      });
                     },
                     child: Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(24),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: isSelected ? Colors.green[700]! : const Color.fromARGB(49, 0, 0, 0),
+                          width: isSelected ? 2 : 0.5,
+                        ),
                       ),
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 24),
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          CircleAvatar(
-                            radius: 30,
-                            backgroundColor: service['color'],
-                            child: Icon(
-                              service['icon'],
-                              size: 32,
-                              color: Colors.white,
-                            ),
+                          Image.asset(
+                            service['icon'],
+                            height: 45,
+                            width: 45,
+                            fit: BoxFit.cover,
                           ),
                           const SizedBox(width: 24),
                           Expanded(
                             child: Text(
                               service['title'],
                               style: theme.textTheme.titleMedium?.copyWith(
-                                color: Colors.green[900],
-                                fontWeight: FontWeight.w700,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
                               ),
                             ),
                           ),
@@ -302,6 +225,29 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
             ),
+            CustomButton(
+              text: 'Next',
+              backgroundColor:Color(0xFF205b3b) ,
+              onPressed: () {
+                if (_selectedServiceIndex != null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => BookingPage(
+                        serviceTitle: services[_selectedServiceIndex!]['title'],
+                      ),
+                    ),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Please select a service')),
+                  );
+                }
+              },
+              borderRadius: 10,
+              padding: 10,
+            ),
+            SizedBox(height: 50),
           ],
         ),
       ),
